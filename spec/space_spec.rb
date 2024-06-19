@@ -1,7 +1,7 @@
 require_relative '../lib/space.rb'
 
 describe Space do
-  subject(:space) {described_class.new()}
+  subject(:space) {described_class.new(0,0)}
   describe '#filled?' do
     describe 'when it is filled' do
       it 'returns true' do
@@ -24,8 +24,8 @@ describe Space do
       expect{space.fill("red")}.to change{space.instance_variable_get(:@filled)}.from(false).to (true)
     end
     it 'changes disk color to the given color' do
-      space.instance_variable_set(:@disk_color,"blue")
-      expect{space.fill("red")}.to change{space.instance_variable_get(:@disk_color)}.from("blue").to ("red")
+      space.instance_variable_set(:@disk_sign,"blue")
+      expect{space.fill("red")}.to change{space.instance_variable_get(:@disk_sign)}.from("blue").to ("red")
     end
   end
 end
