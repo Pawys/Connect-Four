@@ -31,44 +31,45 @@ class Gameboard
       return 'Erorr: column is full'
     end
   end
-  def check_win(last_move,columns = @columns)
-    #check_horizontal
-    filled_sign = last_move.disk_sign
-    horizontal_move = last_move
-    #set the horizontal_move variable to be at the end of the horizontal line
-    until !columns[horizontal_move.position[0] - 1][horizontal_move.position[1]].filled?
-      horizontal_move = columns[horizontal_move.position[0] - 1][horizontal_move.position[1]]
+
+  def horizontal_win?(last_move)
+    x,y = last_move.position[0],last_move.position[1]
+    until !@columns[x - 1][y].filled_with?(last_move.disk_sign)
+      x -= 1
     end
-    # check if 3 spaces to the right of the horizontal move are full
-    winning_horizontal = [columns[horizontal_move.position[0] + 1][horizontal_move.position[1]],columns[horizontal_move.position[0] + 2][horizontal_move.position[1]],columns[horizontal_move.position[0] + 3][horizontal_move.position[1]]]
-    if winning_horizontal.all? {|space| space.filled_with?(filled_sign)}
-      return true
-    end
-    #check_vertical
-    vertical_move = last_move
-    winning_vertical = [columns[vertical_move.position[0]][vertical_move.position[1] - 1],columns[vertical_move.position[0]][vertical_move.position[1] - 2],columns[vertical_move.position[0]][vertical_move.position[1] - 3]]
-    if winning_vertical.all? {|space| space.filled_with?(filled_sign)}
-      return true
-    end
-    #check the right diagonal
-    diagonal_move = last_move
-    until !columns[diagonal_move.position[0] + 1][diagonal_move.position[1] + 1].filled?
-      diagonal_move = columns[diagonal_move.position[0] + 1][diagonal_move.position[1] + 1]
-    end
-    winning_diagonal = [columns[diagonal_move.position[0] - 1][diagonal_move.position[1] - 1],columns[diagonal_move.position[0] - 2][diagonal_move.position[1] - 2],columns[diagonal_move.position[0] - 3][diagonal_move.position[1] - 3]]
-    if winning_diagonal.all? {|space| space.filled_with?(filled_sign)}
-      return true
-    end
-    #check the left diagonal_move
-    diagonal_move = last_move
-    until !columns[diagonal_move.position[0] - 1][diagonal_move.position[1] + 1].filled?
-      diagonal_move = columns[diagonal_move.position[0] - 1][diagonal_move.position[1] + 1]
-    end
-    winning_diagonal = [columns[diagonal_move.position[0] + 1][diagonal_move.position[1] - 1],columns[diagonal_move.position[0] + 2][diagonal_move.position[1] - 2],columns[diagonal_move.position[0] + 3][diagonal_move.position[1] - 3]]
-    if winning_diagonal.all? {|space| space.filled_with?(filled_sign)}
-      return true
-    end
+    winning_horizontal = [@columns.dig(x+1,y),@columns.dig(x+2,y),@columns.dig(x+3,y)]
+    return true if winning_horizontal.all? {|space| space&.filled_with?(last_move.disk_sign)}
     false
+  end
+
+  def vertical_win?(last_move)
+    x,y = last_move.position[0],last_move.position[1]
+    winning_vertical = [@columns.dig(x, y - 1), @columns.dig(x, y - 2), @columns.dig(x, y - 3)]
+    return true if winning_vertical.all? { |space| space&.filled_with?(last_move.disk_sign) }
+    false
+  end
+
+  def diagonal_win?(last_move)
+    x,y = last_move.position[0],last_move.position[1]
+    until !@columns[x + 1][y + 1]&.filled_with?(last_move.disk_sign)
+      x += 1
+      y += 1
+    end
+    winning_diagonal = [@columns.dig(x - 1, y - 1), @columns.dig(x - 2, y - 2), @columns.dig(x - 3, y - 3)]
+    return true if winning_diagonal.all? { |space| space&.filled_with?(last_move.disk_sign) }
+
+    x,y = last_move.position[0],last_move.position[1]
+    until !@columns[x - 1][y + 1]&.filled_with?(last_move.disk_sign)
+      x -= 1
+      y += 1
+    end
+    winning_diagonal = [@columns.dig(x + 1, y - 1), @columns.dig(x + 2, y - 2), @columns.dig(x + 3, y - 3)]
+    return true if winning_diagonal.all? { |space| space&.filled_with?(last_move.disk_sign) }
+    false
+  end
+
+  def check_win(last_move)
+    horizontal_win?(last_move) || vertical_win?(last_move) || diagonal_win?(last_move)
   end
   def draw()
     @vertical_size.times do |i|
