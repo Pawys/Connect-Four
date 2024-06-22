@@ -60,106 +60,80 @@ describe Gameboard do
       end
     end
   end
-  describe '#horizontal_win?' do
-    describe 'if there is a horizontal win' do
-      before do 
-        columns[1][0].fill("X")
-        columns[2][0].fill("X")
-        columns[3][0].fill("X")
-        columns[4][0].fill("X")
-        gameboard.instance_variable_set(:@columns,columns)
+  describe 'win?' do
+    describe 'when there is a win' do
+      describe 'if there is a horizontal win' do
+        before do 
+          columns[1][0].fill("X")
+          columns[2][0].fill("X")
+          columns[3][0].fill("X")
+          columns[4][0].fill("X")
+          gameboard.instance_variable_set(:@columns,columns)
+        end
+        it 'returns true' do
+          last_move = columns[1][0]
+          result = gameboard.win?(last_move)
+          expect(result).to eq(true)
+        end
       end
-      it 'returns true' do
-        last_move = columns[1][0]
-        result = gameboard.horizontal_win?(last_move)
-        expect(result).to eq(true)
+      describe 'if there is a vertical win' do
+        before do 
+          columns[5][2].fill("X")
+          columns[5][3].fill("X")
+          columns[5][4].fill("X")
+          columns[5][5].fill("X")
+          gameboard.instance_variable_set(:@columns,columns)
+        end
+        it 'returns true' do
+          last_move = columns[5][5]
+          result = gameboard.win?(last_move)
+          expect(result).to eq(true)
+        end
+      end
+      describe 'if there is a left diagonal win' do
+        before do
+          columns[2][4].fill("X")
+          columns[3][3].fill("X")
+          columns[4][2].fill("X")
+          columns[5][1].fill("X")
+          gameboard.instance_variable_set(:@columns,columns)
+        end
+        it 'returns true' do
+          last_move = columns[3][3]
+          result = gameboard.win?(last_move)
+          expect(result).to eq(true)
+        end
+      end
+      describe 'if there is a right diagonal win' do
+        before do
+          columns[0][2].fill("X")
+          columns[1][3].fill("X")
+          columns[2][4].fill("X")
+          columns[3][5].fill("X")
+          gameboard.instance_variable_set(:@columns,columns)
+        end
+        it 'returns true' do
+          last_move = columns[3][5]
+          result = gameboard.win?(last_move)
+          expect(result).to eq(true)
+        end
       end
     end
-    describe 'if there isnt a win' do
+    describe 'when there isnt a win' do
       before do
-        columns[1][0].fill("X")
-        columns[6][0].fill("X")
-        columns[3][0].fill("X")
-        columns[4][0].fill("X")
-        gameboard.instance_variable_set(:@columns,columns)
-      end
-      it 'returns false' do
-        last_move = columns[4][0]
-        result = gameboard.horizontal_win?(last_move)
-        expect(result).to eq(false)
-      end
-    end
-  end
-  describe '#vertical_win?' do
-    describe 'if there is a vertical win' do
-      before do 
-        columns[5][2].fill("X")
-        columns[5][3].fill("X")
-        columns[5][4].fill("X")
-        columns[5][5].fill("X")
-        gameboard.instance_variable_set(:@columns,columns)
-      end
-      it 'returns true' do
-        last_move = columns[5][5]
-        result = gameboard.vertical_win?(last_move)
-        expect(result).to eq(true)
-      end
-    end
-    describe 'if there isnt a win' do
-      before do
-        columns[2][2].fill("X")
-        columns[3][3].fill("X")
-        columns[2][4].fill("X")
-        columns[2][5].fill("X")
-        gameboard.instance_variable_set(:@columns,columns)
-      end
-      it 'returns false' do
-        last_move = columns[2][5]
-        result = gameboard.vertical_win?(last_move)
-        expect(result).to eq(false)
-      end
-    end
-  end
-  describe '#diagonal_win?' do
-    describe 'if there is a left diagonal win' do
-      before do
-        columns[2][4].fill("X")
-        columns[3][3].fill("X")
-        columns[4][2].fill("X")
-        columns[5][1].fill("X")
-        gameboard.instance_variable_set(:@columns,columns)
-      end
-      it 'returns true' do
-        last_move = columns[3][3]
-        result = gameboard.diagonal_win?(last_move)
-        expect(result).to eq(true)
-      end
-    end
-    describe 'if there is a right diagonal win' do
-      before do
+        columns[0][0].fill("X")
+        columns[0][1].fill("X")
         columns[0][2].fill("X")
-        columns[1][3].fill("X")
-        columns[2][4].fill("X")
-        columns[3][5].fill("X")
-        gameboard.instance_variable_set(:@columns,columns)
-      end
-      it 'returns true' do
-        last_move = columns[3][5]
-        result = gameboard.diagonal_win?(last_move)
-        expect(result).to eq(true)
-      end
-    end
-    describe 'if there isnt a win' do
-      before do
-        columns[0][3].fill("X")
-        columns[1][3].fill("X")
-        columns[2][4].fill("X")
-        columns[3][5].fill("X")
+
+        columns[1][1].fill("X")
+        columns[2][1].fill("X")
+
+        columns[2][2].fill("X")
         gameboard.instance_variable_set(:@columns,columns)
       end
       it 'returns false' do
-        last_move = columns[3][5]
-        result = gameboard.diagonal_win?(last_move)
+        last_move = columns[2][2]
+        result = gameboard.win?(last_move)
         expect(result).to eq(false)
       end
     end
