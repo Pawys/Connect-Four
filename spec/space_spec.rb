@@ -18,7 +18,7 @@ describe Space do
       end
     end
   end
-  describe "fill" do
+  describe "#fill" do
     it 'changes filled to true' do
       space.instance_variable_set(:@filled,false)
       expect{space.fill("red")}.to change{space.instance_variable_get(:@filled)}.from(false).to (true)
@@ -26,6 +26,32 @@ describe Space do
     it 'changes disk color to the given color' do
       space.instance_variable_set(:@disk_sign,"blue")
       expect{space.fill("red")}.to change{space.instance_variable_get(:@disk_sign)}.from("blue").to ("red")
+    end
+  end
+  describe '#filled_with?' do
+    describe 'if it is filled with chosen disk sign' do
+      before do
+        space.fill("X")
+      end
+      it 'returns true' do
+        result = space.filled_with?("X")
+        expect(result).to eq(true)
+      end
+    end
+    describe 'if it isnt filled with a different disk sign' do
+      before do
+        space.fill("O")
+      end
+      it 'returns true' do
+        result = space.filled_with?("X")
+        expect(result).to eq(false)
+      end
+    end
+    describe 'if it isnt filled' do
+      it 'returns true' do
+        result = space.filled_with?("X")
+        expect(result).to eq(false)
+      end
     end
   end
 end
