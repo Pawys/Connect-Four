@@ -60,7 +60,24 @@ describe Gameboard do
       end
     end
   end
-  describe 'win?' do
+  describe '#tie?' do
+    describe 'when all the columns are full' do
+      before do
+        allow(gameboard).to receive(:column_full?).and_return(true)
+      end
+      it 'returns true' do
+        result = gameboard.tie?()
+        expect(result).to eq(true)
+      end
+    end
+    describe 'when all the columns arent full' do
+      it 'returns false' do
+        result = gameboard.tie?()
+        expect(result).to eq(false)
+      end
+    end
+  end
+  describe '#win?' do
     describe 'when there is a win' do
       describe 'if there is a horizontal win' do
         before do 
@@ -135,6 +152,63 @@ describe Gameboard do
         last_move = columns[2][2]
         result = gameboard.win?(last_move)
         expect(result).to eq(false)
+      end
+    end
+  end
+  describe '#column_full?' do
+    describe 'when column is full' do
+      before do
+        columns[0][0].fill("X")
+        columns[0][1].fill("X")
+        columns[0][2].fill("X")
+        columns[0][3].fill("X")
+        columns[0][4].fill("X")
+        columns[0][5].fill("X")
+      end
+      describe 'when integer is passed' do
+        it 'returns true' do
+          result = gameboard.column_full?(0)
+          expect(result).to eq(true)
+        end
+      end
+      describe 'when an aray is passed' do
+        it 'returns true' do
+          result = gameboard.column_full?(columns[0])
+          expect(result).to eq(true)
+        end
+      end
+    end
+    describe 'when column is empty' do
+      describe 'when integer is passed' do
+        it 'returns false' do
+          result = gameboard.column_full?(0)
+          expect(result).to eq(false)
+        end
+      end
+      describe 'when an aray is passed' do
+        it 'returns false' do
+          result = gameboard.column_full?(columns[0])
+          expect(result).to eq(false)
+        end
+      end
+    end
+    describe 'when column has some elements' do
+      before do
+        columns[0][0].fill("X")
+        columns[0][1].fill("X")
+        columns[0][2].fill("X")
+      end
+      describe 'when integer is passed' do
+        it 'returns false' do
+          result = gameboard.column_full?(0)
+          expect(result).to eq(false)
+        end
+      end
+      describe 'when an aray is passed' do
+        it 'returns false' do
+          result = gameboard.column_full?(columns[0])
+          expect(result).to eq(false)
+        end
       end
     end
   end

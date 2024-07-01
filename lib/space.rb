@@ -13,8 +13,8 @@ class Space
     @filled
   end
   def inspect
-    return "[#{@disk_sign}]" if filled?
-    '[ ]'
+    return "|#{@disk_sign}|" if filled?
+    '|  |'
   end
   def filled_with?(disk_sign)
     if filled?

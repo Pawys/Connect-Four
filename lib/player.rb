@@ -1,5 +1,5 @@
-def Player
-  attr_acessor :name, :disk
+class Player
+  attr_accessor :name, :disk
   def initialize(name,disk)
     @name = name
     @disk = disk
