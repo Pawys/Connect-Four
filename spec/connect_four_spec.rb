@@ -97,6 +97,32 @@ describe ConnectFour do
       end
     end
   end
+  describe '#play' do
+    before do
+      allow(connect_four).to receive(:place_disk)
+      allow(connect_four).to receive(:switch_player)
+      allow(connect_four).to receive(:game_end?)
+      allow(connect_four).to receive(:end_game)
+    end
+    describe 'when game_end? is true' do
+      before do
+        allow(connect_four).to receive(:game_end?).and_return(true)
+      end
+      it 'calls place_disk once' do
+        expect(connect_four).to receive(:place_disk).once
+        connect_four.play()
+      end
+    end
+    describe 'when game_end? is false' do
+      before do
+        allow(connect_four).to receive(:game_end?).and_return(false,false,false,true)
+      end
+      it 'keeps calling the functions'do
+        expect(connect_four).to receive(:place_disk).exactly(4).times
+        connect_four.play()
+      end
+    end
+  end
   describe '#game_end?' do
     describe 'if there is a tie' do
       before do
